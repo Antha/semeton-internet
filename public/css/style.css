@@ -1,85 +1,18 @@
-body {
-  font-family: Arial, sans-serif;
-  margin: 0;
-  background: #f9f9f9;
-  color: #333;
+
+.header-custom {
+  position: relative;
+  background: url('./../images/header-custom.jpeg') center/cover no-repeat; /* ganti dengan gambar tapoi */
 }
 
-.banner {
-  background: linear-gradient(135deg, #ff4d4d, #ff9933);
-  color: white;
-  text-align: center;
-  padding: 40px 20px;
+.header-custom::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background-color: rgba(220, 53, 69, 0.7); /* overlay transparan warna merah (bg-danger) */
 }
 
-.banner h1 {
-  font-size: 48px;
-  margin: 0;
-}
-
-.banner p {
-  margin-top: 10px;
-  font-size: 16px;
-}
-
-.search-section {
-  display: flex;
-  justify-content: center;
-  padding: 20px;
-  background: #fff;
-  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-}
-
-.search-section input {
-  width: 300px;
-  padding: 10px;
-  border: 1px solid #ddd;
-  border-radius: 4px 0 0 4px;
-}
-
-.search-section button {
-  padding: 10px 20px;
-  border: none;
-  background: #ff4d4d;
-  color: white;
-  border-radius: 0 4px 4px 0;
-  cursor: pointer;
-}
-
-.search-section button:hover {
-  background: #e63e3e;
-}
-
-.promo {
-  padding: 40px 20px;
-  text-align: center;
-}
-
-.promo h2 {
-  margin-bottom: 20px;
-  color: #ff4d4d;
-}
-
-.promo-cards {
-  display: flex;
-  justify-content: center;
-  gap: 20px;
-}
-
-.card {
-  background: white;
-  padding: 20px;
-  border-radius: 8px;
-  width: 250px;
-  box-shadow: 0 4px 6px rgba(0,0,0,0.1);
-  transition: transform 0.2s;
-}
-
-.card:hover {
-  transform: translateY(-5px);
-}
-
-.card h3 {
-  color: #ff9933;
-  margin-bottom: 10px;
+.header-custom h1,
+.header-custom p {
+  position: relative; /* supaya teks tetap di atas overlay */
+  z-index: 1;
 }
