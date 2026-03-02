@@ -16,3 +16,76 @@
   position: relative; /* supaya teks tetap di atas overlay */
   z-index: 1;
 }
+
+.text-byu{
+  color: #00BCF1;
+}
+
+.bg-secondary-custom{
+  background-color: #686868;
+}
+
+.line{
+    position:relative;
+    width:100%;
+    height:2px;
+    background:#bfbfbf;
+    margin-top:10px;
+}
+
+.line-red{
+    position:absolute;
+    right:0;
+    top:0;
+    height:4px;
+    width:200px;
+    background:#d32f2f;
+}
+
+.img-card-custom{
+    height: clamp(150px, 20vw, 210px);
+    object-fit: cover;
+    width:100%;
+}
+
+.card{
+  overflow: hidden;
+}
+
+.card-body{
+  transition: background 0.3s ease;
+}
+
+.card:hover .card-body-simpati{
+  background:#d32f2f;
+}
+
+.card:hover .card-body-byu{
+  background:#00BCF1;
+}
+
+.link-style{
+  color: #d32f2f;
+  text-decoration: none;
+  transition: background 0.3s ease;
+}
+
+.link-style:hover{
+  color: #ad1616;
+  text-decoration: none;
+}
+
+.btn-green{
+  background-color: #1aa67d;
+  color: #fff;
+}
+
+.btn-green:hover{
+  background-color: #20c997;
+  color: #fff;
+  -moz-transition: all 0.4s ease-in-out;
+	-o-transition: all 0.4s ease-in-out;
+	-ms-transition: all 0.4s ease-in-out;
+	-webkit-transition: all 0.4s ease-in-out;
+	transition: all 0.4s ease-in-out;
+}
