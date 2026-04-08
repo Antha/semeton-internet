@@ -210,15 +210,15 @@
           </div>
           <div class="row byu-section">
             <div class="col-12">
-              <div class="accordion" id="accordionExampleSimpati">
+              <div class="accordion" id="accordionExampleByu">
                 <?php foreach($listDisplayByu as $rows){ ?>
                 <div class="accordion-item">
                     <h2 class="accordion-header" id="heading<?php echo $rows['group_display']; ?>">
                       <button class="accordion-button collapsed" type="button" 
                       data-bs-toggle="collapse" 
-                      data-bs-target="#collapse<?php echo $rows['group_display']; ?>" 
+                      data-bs-target="#collapseByu<?php echo $rows['group_display']; ?>" 
                       aria-expanded="false" 
-                      aria-controls="collapse<?php echo $rows['group_display']; ?>">
+                      aria-controls="collapseByu<?php echo $rows['group_display']; ?>">
                         <?php 
                           // ambil satu nama voucher untuk header
                           foreach($listGroupVfByu as $items){ 
@@ -230,10 +230,10 @@
                         ?>
                       </button>
                     </h2>
-                    <div id="collapse<?php echo $rows['group_display']; ?>" 
+                    <div id="collapseByu<?php echo $rows['group_display']; ?>" 
                     class="accordion-collapse collapse" 
                     aria-labelledby="heading<?php echo $rows['group_display']; ?>" 
-                    data-bs-parent="#accordionExampleSimpati">
+                    data-bs-parent="#accordionExampleByu">
                       <div class="accordion-body">
                           <div class="container-fluid">
                             <div class="row justify-content-center">

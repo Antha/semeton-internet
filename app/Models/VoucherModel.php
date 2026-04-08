@@ -72,7 +72,6 @@ class VoucherModel extends Model
 
     public function getGroupDisplay($kategori)
     {
-
         $result = $this->select('group_display')
                 ->where([
                     'kategori' => $kategori
