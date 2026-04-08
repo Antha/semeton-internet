@@ -9,7 +9,7 @@
         
         <!-- Header -->
         <div class="modal-header bg-danger text-white">
-          <h5 class="modal-title beliPaketLabel">BONUS INTERNET SIMPATI</h5>
+          <h5 class="modal-title beliPaketLabel">Voucher Fisik 4 GB (1 hari-24 jam)</h5>
           <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
         
@@ -19,14 +19,6 @@
           <div class="mb-3">
             <label for="nomorTelkomsel" class="form-label">Masukkan Nomor Telkomsel</label>
             <input type="text" class="form-control msisdn" placeholder="+62 8123456789">
-          </div>
-
-          <!-- Pilih Paket -->
-          <div class="mb-3">
-            <label class="form-label">Pilih Paket</label>
-            <select class="form-control pilihPaket mb-3">
-              <option value="">Pilih Paket</option>
-            </select>
           </div>
 
           <div class="mb-3">
@@ -48,8 +40,8 @@
         
         <!-- Footer -->
         <div class="modal-footer">
-          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
-          <button type="button" class="btn btn-warning">Beli Paket</button>
+          <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Batal</button>
+          <button type="button" class="btn btn-orange">Beli</button>
         </div>
       </div>
  
@@ -72,14 +64,6 @@
           <div class="mb-3">
             <label for="nomorTelkomsel" class="form-label">Masukkan Nomor Telkomsel</label>
             <input type="text" class="form-control msisdn" placeholder="+62 8123456789">
-          </div>
-
-          <!-- Pilih Paket -->
-          <div class="mb-3">
-            <label class="form-label">Pilih Paket</label>
-            <select class="form-control pilihPaket mb-3">
-              <option value="">Pilih Paket</option>
-            </select>
           </div>
 
           <div class="mb-3">
@@ -113,176 +97,244 @@
   <?= $this->include('/includes/header'); ?>  
 
   <!-- Promo -->
-  <section class="container my-5">
-    <div class="row justify-content-center mb-4">
-      <div class="col-sm-8 col-12">
-
-        <h2 class="text-danger fw-bold text-start">
-          <i class="fa-solid fa-diamond me-2"></i>CATALIST
-        </h2>
-              
-      </div>
-    </div>
-
-     <div class="row justify-content-center mb-5">
-      <div class="col-sm-8 col-12">
-        <h3 class="text-danger text-end"><?php echo session()->get('outlet_name'); ?></h3>
-        <div class="line">
-          <div class="line-red"></div>
+  <section class="container-fluid mt-4 mt-md-5">
+    <div class="row justify-content-center">
+      <div class="col-12 text-center">
+        <div class="store-title">
+          <h3><?php echo session()->get('outlet_name'); ?></h3>
         </div>
       </div>
-    </div>
-    <div class="row justify-content-center simpati-section">
-      <div class="col-12 mb-2">
-        <div class="container">
-          <div class="row justify-content-center">
-            <div class="col-sm-8 col-12">
-              <h5 class="text-danger text-start">
-                <i class="fa-solid fa-star me-2"></i>SIMPATI
-              </h5>
+
+      <div class="col-12 col-md-10 mt-3 mt-md-5">
+        <div class="container-fluid">
+          <div class="row g-0">
+            <div class="offset-9 col-3 offset-lg-10 col-lg-2 mb-4 text-end">
+              <img class="img-fluid w-50" src="<?= esc(base_url('images/logo_catalist.png')); ?>"/>
             </div>
           </div>
-        </div>
-      </div>
+          <div class="row justify-content-start g-0 simpati-section">
+            <div class="col-5 col-lg-2">
+              <h5 class="fw-bold title-accor">PAKET SIMPATI</h5>
+            </div>
+          </div>
+          <div class="row simpati-section">
+            <div class="col-12">
+              <div class="accordion" id="accordionExampleSimpati">
+                <?php foreach($listDisplaySimpati as $rows){ ?>
+                <div class="accordion-item">
+                    <h2 class="accordion-header" id="heading<?php echo $rows['group_display']; ?>">
+                      <button class="accordion-button collapsed" type="button" 
+                      data-bs-toggle="collapse" 
+                      data-bs-target="#collapse<?php echo $rows['group_display']; ?>" 
+                      aria-expanded="false" 
+                      aria-controls="collapse<?php echo $rows['group_display']; ?>">
+                        <?php 
+                          // ambil satu nama voucher untuk header
+                          foreach($listGroupVfSimpati as $items){ 
+                            if($items['group_display'] == $rows['group_display']){
+                              echo $items['group_voucher']; 
+                              break; // keluar setelah ketemu
+                            }
+                          }
+                        ?>
+                      </button>
+                    </h2>
+                    <div id="collapse<?php echo $rows['group_display']; ?>" 
+                    class="accordion-collapse collapse" 
+                    aria-labelledby="heading<?php echo $rows['group_display']; ?>" 
+                    data-bs-parent="#accordionExampleSimpati">
+                      <div class="accordion-body">
+                          <div class="container-fluid">
+                            <div class="row justify-content-center">
+                              <?php foreach($cardItemSimpati as $itemsDetail){ 
+                                if($itemsDetail['group_display'] == $rows['group_display']){?>
+                                <div class="col-12 col-sm-6 col-md-4 col-lg-3 mb-2">
+                                  <div class="custom-card"  
+                                        data-group="<?php echo $itemsDetail['group_voucher']; ?>"
+                                        data-nama="<?php echo $itemsDetail['nama_voucher']; ?>"
+                                        data-kuota="<?php echo $itemsDetail['kuota']; ?>"
+                                        data-validity="<?php echo $itemsDetail['validity']; ?>"
+                                        data-harga="<?php echo $itemsDetail['harga']; ?>"
+                                        data-kategori="SIMPATI"
+                                        data-modal="#simpatiModal"
+                                        data-bs-toggle="modal" 
+                                        data-bs-target="#simpatiModal"
+                                        role="button">
 
-      <div class="container">
-          <div class="row justify-content-center">
-            <div class="col-sm-8 col-12">
-              <div class="row">
-                <?php foreach($listGroupVfSimpati as $rows){ ?>
-                  <div class="col-sm-4 col-6">
-                    <!-- Card dengan trigger modal -->
-                    <div class="card shadow-sm mb-3 bg-light card-voucher"
-                        data-group="<?= $rows['group_voucher']; ?>"
-                        data-kategori="SIMPATI"
-                        data-modal="#simpatiModal"
-                        data-bs-toggle="modal" 
-                        data-bs-target="#simpatiModal" 
-                        style="cursor:pointer;">
-                      <img src="<?= esc(base_url('images/simpati-card-v2.png')); ?>" 
-                        class="card-img-top img-card-custom" alt="SIMPATI">
-                      <div class="card-body bg-secondary-custom card-body-simpati">
-                        <p class="card-text fw-bold text-white"><?php echo $rows['group_voucher']; ?></p>
+                                    <!-- HEADER -->
+                                    <div class="custom-card-header">
+                                      <h6>Paket Internet</h6>
+                                      <h5><?php echo $itemsDetail['kuota']; ?> | <?php echo $itemsDetail['validity']; ?> hari</h5>
+                                    </div>
+
+                                    <!-- BODY -->
+                                    <div class="custom-card-body">
+                                      <div class="card-info">
+                                        <span>Internet</span>
+                                        <strong><?php echo $itemsDetail['kuota']; ?></strong>
+                                      </div>
+
+                                      <div class="card-info">
+                                        <span>Masa aktif</span>
+                                        <strong><?php echo $itemsDetail['validity']; ?> hari</strong>
+                                      </div>
+                                    </div>
+
+                                    <!-- FOOTER -->
+                                    <div class="custom-card-footer">
+                                      <div class="card-price">Rp <?php echo nf0($itemsDetail['harga']); ?></div>
+                                    </div>
+
+                                  </div>
+                                </div>
+                              <?php }} ?>
+                            </div>
+                          </div>
                       </div>
                     </div>
-                  </div>
+                  
+                </div>
                 <?php } ?>
               </div>
             </div>
           </div>
-      </div>
-    </div>
-
-    <div class="row justify-content-center byu-section mt-5">
-      <div class="col-12 mb-2">
-        <div class="container">
-          <div class="row justify-content-center">
-            <div class="col-sm-8 col-12">
-              <h5 class="text-byu text-start">
-                <i class="fa-solid fa-star me-2"></i>ByU
-              </h5>
-            </div>
-          </div>
         </div>
       </div>
-      
-      <div class="container">
-          <div class="row justify-content-center">
-            <div class="col-sm-8 col-12">
-              <div class="row">
-                <?php foreach($listGroupVfByu as $rows){ ?>
-                  <div class="col-sm-4 col-6">
-                    <!-- Card dengan trigger modal -->
-                    <div class="card shadow-sm mb-3 bg-light card-voucher"
-                        data-group="<?= $rows['group_voucher']; ?>"
-                        data-kategori="BYU"
-                        data-modal="#byuModal" 
-                        data-bs-toggle="modal" 
-                        data-bs-target="#byuModal" 
-                        style="cursor:pointer;">
-                      <img src="<?= esc(base_url('images/byu-card.png')); ?>" 
-                        class="card-img-top img-card-custom" alt="ByU">
-                      <div class="card-body bg-secondary-custom card-body-byu">
-                        <p class="card-text fw-bold text-white"><?php echo $rows['group_voucher']; ?></p>
+
+      <div class="col-12 col-md-10 mt-3 mt-md-5">
+        <div class="container-fluid">
+          <div class="row justify-content-start g-0 byu-section">
+            <div class="col-5 col-lg-2">
+              <h5 class="fw-bold title-accor">PAKET BYU</h5>
+            </div>
+          </div>
+          <div class="row byu-section">
+            <div class="col-12">
+              <div class="accordion" id="accordionExampleSimpati">
+                <?php foreach($listDisplayByu as $rows){ ?>
+                <div class="accordion-item">
+                    <h2 class="accordion-header" id="heading<?php echo $rows['group_display']; ?>">
+                      <button class="accordion-button collapsed" type="button" 
+                      data-bs-toggle="collapse" 
+                      data-bs-target="#collapse<?php echo $rows['group_display']; ?>" 
+                      aria-expanded="false" 
+                      aria-controls="collapse<?php echo $rows['group_display']; ?>">
+                        <?php 
+                          // ambil satu nama voucher untuk header
+                          foreach($listGroupVfByu as $items){ 
+                            if($items['group_display'] == $rows['group_display']){
+                              echo $items['group_voucher']; 
+                              break; // keluar setelah ketemu
+                            }
+                          }
+                        ?>
+                      </button>
+                    </h2>
+                    <div id="collapse<?php echo $rows['group_display']; ?>" 
+                    class="accordion-collapse collapse" 
+                    aria-labelledby="heading<?php echo $rows['group_display']; ?>" 
+                    data-bs-parent="#accordionExampleSimpati">
+                      <div class="accordion-body">
+                          <div class="container-fluid">
+                            <div class="row justify-content-center">
+                              <?php foreach($cardItemByu as $itemsDetail){ 
+                                if($itemsDetail['group_display'] == $rows['group_display']){?>
+                                <div class="col-md-3 mb-2">
+                                  <div class="custom-card byu-card"  
+                                        data-group="<?php echo $itemsDetail['group_voucher']; ?>"
+                                        data-nama="<?php echo $itemsDetail['nama_voucher']; ?>"
+                                        data-kuota="<?php echo $itemsDetail['kuota']; ?>"
+                                        data-validity="<?php echo $itemsDetail['validity']; ?>"
+                                        data-harga="<?php echo $itemsDetail['harga']; ?>"
+                                        data-kategori="BYU"
+                                        data-modal="#byuModal"
+                                        data-bs-toggle="modal" 
+                                        data-bs-target="#byuModal"
+                                        role="button">
+
+                                    <!-- HEADER -->
+                                    <div class="custom-card-header">
+                                      <h6>Paket Internet</h6>
+                                      <h5><?php echo $itemsDetail['kuota']; ?> | <?php echo $itemsDetail['validity']; ?> hari</h5>
+                                    </div>
+
+                                    <!-- BODY -->
+                                    <div class="custom-card-body">
+                                      <div class="card-info">
+                                        <span>Internet</span>
+                                        <strong><?php echo $itemsDetail['kuota']; ?></strong>
+                                      </div>
+
+                                      <div class="card-info">
+                                        <span>Masa aktif</span>
+                                        <strong><?php echo $itemsDetail['validity']; ?> hari</strong>
+                                      </div>
+                                    </div>
+
+                                    <!-- FOOTER -->
+                                    <div class="custom-card-footer">
+                                      <div class="card-price">Rp <?php echo nf0($itemsDetail['harga']); ?></div>
+                                    </div>
+
+                                  </div>
+                                </div>
+                              <?php }} ?>
+                            </div>
+                          </div>
                       </div>
                     </div>
-                  </div>
+                  
+                </div>
                 <?php } ?>
               </div>
             </div>
           </div>
+        </div>
       </div>
     </div>
+    
+   
   </section>
+
+  <!-- Header -->
+  <?= $this->include('/includes/footer'); ?>  
   <script>
+    function formatRupiah(angka) {
+      return 'Rp ' + angka.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+    }
 
-    document.querySelectorAll(".card-voucher").forEach(card => {
+    var simpatiModal = document.getElementById('simpatiModal');
+    simpatiModal.addEventListener('show.bs.modal', function (event) {
+      // Card yang diklik
+      var card = event.relatedTarget;
 
-    card.addEventListener("click", function(){
+      // Ambil data dari atribut
+      var nama = card.getAttribute('data-nama');
+      var kuota = card.getAttribute('data-kuota');
+      var validity = card.getAttribute('data-validity');
+      var harga = card.getAttribute('data-harga');
 
-    let group = this.dataset.group;
-    let kategori = this.dataset.kategori;
-    let modalId   = this.dataset.modal;
-
-    let modal = document.querySelector(modalId);
-
-    let label    = modal.querySelector(".beliPaketLabel");
-    let dropdown = modal.querySelector(".pilihPaket");
-    let harga    = modal.querySelector(".hargaVoucher");
-
-    // ubah judul modal
-    label.textContent = group;
-
-    // reset isi
-    dropdown.innerHTML = '<option value="">Loading paket...</option>';
-    harga.value = "";
-
-    fetch("<?= base_url('outlet_store/getVoucher') ?>",{
-    method:"POST",
-    headers:{
-    "Content-Type":"application/x-www-form-urlencoded"
-    },
-    body:"group="+encodeURIComponent(group)+"&kategori="+kategori
-    })
-    .then(response => response.json())
-    .then(data => {
-
-    dropdown.innerHTML = '<option value="">Pilih Paket</option>';
-
-    data.forEach(v => {
-
-    let option = document.createElement("option");
-
-    option.value = v.harga;
-    option.text = v.nama_voucher;
-    option.dataset.harga = v.harga;
-
-    dropdown.appendChild(option);
-
+      // Isi ke elemen modal
+      simpatiModal.querySelector('.modal-title').textContent = nama + " (" + kuota + " | " + validity + " hari)";
+      simpatiModal.querySelector('.hargaVoucher').value = formatRupiah(harga);
     });
 
+    var byuModal = document.getElementById('byuModal');
+    byuModal.addEventListener('show.bs.modal', function (event) {
+      // Card yang diklik
+      var card = event.relatedTarget;
+
+      // Ambil data dari atribut
+      var nama = card.getAttribute('data-nama');
+      var kuota = card.getAttribute('data-kuota');
+      var validity = card.getAttribute('data-validity');
+      var harga = card.getAttribute('data-harga');
+
+      // Isi ke elemen modal
+      byuModal.querySelector('.modal-title').textContent = nama + " (" + kuota + " | " + validity + " hari)";
+      byuModal.querySelector('.hargaVoucher').value = formatRupiah(harga);
     });
 
-    });
-
-    });
-
-
-    // harga otomatis
-    document.querySelectorAll(".pilihPaket").forEach(select => {
-
-      select.addEventListener("change", function(){
-
-        let harga = this.options[this.selectedIndex].dataset.harga;
-
-        let modal = this.closest(".modal");
-
-        modal.querySelector(".hargaVoucher").value =
-          harga ? "Rp "+parseInt(harga).toLocaleString("id-ID") : "";
-
-      });
-
-    });
 
   </script>
 <?php $this->endSection() ?>

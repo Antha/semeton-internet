@@ -21,9 +21,13 @@ class Outlet extends BaseController
 
     public function index()
     {
-    
+        $data['listDisplaySimpati'] = $this->vfModel->getGroupDisplay('SIMPATI');
         $data['listGroupVfSimpati'] = $this->vfModel->listGroupVFSimpati();
+        $data['cardItemSimpati'] = $this->vfModel->cardItemSimpati();
+
+        $data['listDisplayByu'] = $this->vfModel->getGroupDisplay('BYU');
         $data['listGroupVfByu'] = $this->vfModel->listGroupVFByu();
+        $data['cardItemByu'] = $this->vfModel->cardItemByu();
 
         return view('outletStorePage',$data);
     }

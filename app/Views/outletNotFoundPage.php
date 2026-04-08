@@ -19,4 +19,7 @@
     </div>
   </div>
 
+  <!-- Footer -->
+  <?= $this->include('/includes/footer'); ?>   
+
 <?php $this->endSection() ?>

@@ -38,6 +38,9 @@
       </div>
     </div>
   </div>
+
+  <!-- Footer -->
+  <?= $this->include('/includes/footer'); ?>   
   <script type="text/javascript" src="<?php echo base_url('/script/jszip.min.js') ?>"></script>
   <script type="text/javascript" src="<?php echo base_url('/script/FileSaver.min.js') ?>"></script>
   <script type="text/javascript" src="<?php echo base_url('/script/xlsx.full.min.js') ?>"></script>

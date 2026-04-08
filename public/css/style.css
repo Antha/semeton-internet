@@ -17,6 +17,7 @@
   z-index: 1;
 }
 
+
 .text-byu{
   color: #00BCF1;
 }
@@ -88,4 +89,333 @@
 	-ms-transition: all 0.4s ease-in-out;
 	-webkit-transition: all 0.4s ease-in-out;
 	transition: all 0.4s ease-in-out;
+}
+
+.btn-orange{
+    background-color: #ed8415;
+    color: #fff;
+}
+
+.btn-orange:hover {
+  background-color: #d67310; /* lebih tua sedikit */
+  color: #fff;
+}
+
+.teal-text{
+  color: #0F938D;;
+}
+
+.orange-text{
+    color: #D63F13;
+}
+
+.header-hero {
+    position: relative;
+    width: 100%;
+    height: 300px;
+
+    /* Gradient + opacity lebih soft */
+    /*background: linear-gradient(135deg, #f5f7fa, #e4ecf7);*/
+    background: linear-gradient(135deg, #e9eef5, #d6e1ee);
+    
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    /* Polygon dengan ujung ke bawah */
+    clip-path: polygon(
+        0 0,
+        100% 0,
+        100% 85%,
+        50% 100%, /* titik tajam ke bawah */
+        0 85%
+    );
+
+    overflow: hidden;
+}
+
+/* Overlay biar lebih smooth & elegan */
+.header-hero::before {
+    content: "";
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    background: radial-gradient(circle at center, rgba(255,255,255,0.15), transparent 50%);
+    top: 0;
+    left: 0;
+}
+
+/* Logo tetap fokus */
+.header-logo {
+    position: relative;
+    z-index: 2;
+    max-width: 280px;
+    width: 100%;
+
+    /* biar tetap jelas di atas background transparan 
+    filter: drop-shadow(0 8px 20px rgba(0,0,0,0.25));*/
+    filter: drop-shadow(0 6px 12px rgba(0, 0, 0, 0.15));
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .header-hero {
+        height: 220px;
+    }
+
+    .header-logo {
+        max-width: 200px;
+    }
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .header-hero {
+        height: 220px;
+    }
+
+    .header-logo {
+        max-width: 200px;
+    }
+}
+
+.store-title h3 {
+  color: #0F938D;
+  font-weight: bold;
+  position: relative;
+  display: inline-block; /* penting agar width mengikuti teks */
+  margin-bottom: 10px;
+}
+
+.store-title h3::after {
+    content: "";
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%); /* center */
+    
+    bottom: -12px; /* jarak dari teks */
+    width: 60%; /* 80% dari lebar teks */
+    height: 3px;
+    
+    background-color: #ed8415;
+    border-radius: 2px;
+}
+
+/*.footer-wrapper{
+    background: linear-gradient(135deg, #e9eef5, #d6e1ee);
+    color: #626262;
+}*/
+.footer-wrapper {
+    position: relative;
+    width: 100%;
+    height: 100px; /* bisa disesuaikan */
+
+    background: linear-gradient(135deg, #e9eef5, #d6e1ee);
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    /* Polygon dengan ujung ke atas */
+    clip-path: polygon(
+        0 15%,          /* kiri agak turun */
+        50% 0,          /* titik tajam ke atas */
+        100% 15%,       /* kanan agak turun */
+        100% 100%,      /* kanan bawah */
+        0 100%          /* kiri bawah */
+    );
+
+    overflow: hidden;
+}
+
+/* Overlay biar lebih smooth */
+.footer-wrapper::before {
+    content: "";
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    background: radial-gradient(circle at center, rgba(255,255,255,0.15), transparent 50%);
+    top: 0;
+    left: 0;
+}
+
+
+/* =========================
+   ACCORDION STYLE
+========================= */
+
+/* Container */
+.accordion-item {
+    border: 1px solid #d6e1ee;
+    border-radius: 10px;
+    margin-bottom: 12px;
+    overflow: hidden;
+    background-color: #ffffff;
+}
+
+/* Header */
+.accordion-button {
+    background-color: #ffffff;
+    color: #0F938D;
+    font-weight: bold;
+    box-shadow: none;
+    border: none;
+    text-transform: uppercase;
+    transition: all 0.3s ease;
+}
+
+/* Hover */
+.accordion-button:hover {
+    background-color: #f2f6fb;
+}
+
+/* Active (OPEN) */
+.accordion-button:not(.collapsed) {
+    color: #0f4c5c;
+    background: linear-gradient(135deg, #e9eef5, #d6e1ee);
+    box-shadow: none;
+}
+
+/* =========================
+   CUSTOM ARROW COLOR
+========================= */
+
+/* Arrow default (warna disesuaikan) */
+/* Arrow default */
+.accordion-button::after {
+  flex-shrink: 0;
+  width: 1.25rem;
+  height: 1.25rem;
+  margin-left: auto;
+  content: "";
+  background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='%230F938D' viewBox='0 0 16 16'%3e%3cpath fill-rule='evenodd' d='M1.646 4.646a.5.5 0 0 1 .708 0L8 10.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708z'/%3e%3c/svg%3e");
+  background-repeat: no-repeat;
+  background-size: 1.25rem;
+  transition: transform 0.3s ease;
+}
+
+/* Saat accordion aktif (expanded) */
+.accordion-button:not(.collapsed)::after {
+  transform: rotate(180deg);
+}
+
+
+/* =========================
+   BODY
+========================= */
+
+.accordion-body {
+    background-color: #ffffff;
+    border-top: 1px solid #e0e6ef;
+}
+
+/* Smooth collapse */
+.accordion-collapse {
+    transition: all 0.3s ease;
+}
+
+/* ==============================*/
+/* CARD UTAMA */
+.custom-card {
+    border: none;
+    border-radius: 20px;
+    border-top-right-radius: 3px;
+    border-bottom-left-radius: 3px;
+    overflow: hidden;
+    background: #f5f6f8;
+    margin-bottom: 15px;
+    /*box-shadow: 0 10px 25px rgba(0,0,0,0.08);*/
+    box-shadow: 8px 8px 15px rgba(0,0,0,0.25);
+
+}
+
+/* HEADER MERAH */
+.custom-card-header {
+    background: linear-gradient(135deg, #d90429, #ff1e4d);
+    color: #fff;
+    padding: 20px;
+    border-top-left-radius: 20px;
+    /*border-top-right-radius: 20px;*/
+}
+
+.byu-card .custom-card-header {
+    background: linear-gradient(135deg, #00BCF1, #009ACD);
+    color: #fff;
+    padding: 20px;
+    border-top-left-radius: 20px;
+    /*border-top-right-radius: 20px;*/
+}
+
+/* SUBTITLE */
+.custom-card-header h6 {
+    font-size: 14px;
+    font-weight: 500;
+    margin-bottom: 25px;
+    opacity: 0.9;
+}
+
+/* TITLE BESAR */
+.custom-card-header h5 {
+    font-size: 18px;
+    font-weight: 700;
+    margin: 0;
+}
+
+/* BODY */
+.custom-card-body {
+    padding: 20px;
+    background: #f5f6f8;
+}
+
+/* LIST ITEM */
+.card-info {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 12px;
+    font-size: 14px;
+    color: #4a5568;
+}
+
+.card-info strong {
+    color: #1a202c;
+}
+
+/* FOOTER / PRICE */
+.custom-card-footer {
+    background: #eeeeee;
+    padding: 18px 20px;
+    /*border-bottom-left-radius: 20px;*/
+    border-bottom-right-radius: 20px;
+}
+
+.card-price {
+    font-size: 20px;
+    font-weight: 700;
+    color: #e60023;
+}
+
+#simpatiModal .modal-header{
+    background: linear-gradient(135deg, #d90429, #ff1e4d);
+    color: #fff;
+}
+
+.simpati-section .title-accor,
+.simpati-section .accordion-button:hover,
+.simpati-section .accordion-button:not(.collapsed),
+.simpati-section .accordion-button{
+    color: #ff0025;
+}
+
+#byuModal .modal-header{
+    background: linear-gradient(135deg, #00BCF1, #009ACD);
+    color: #fff;
+}
+
+
+.byu-section .title-accor,
+.byu-section .accordion-button:hover,
+.byu-section .accordion-button:not(.collapsed),
+.byu-section .accordion-button,
+.byu-card .card-price {
+    color: #00bcf1;
 }
