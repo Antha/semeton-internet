@@ -164,7 +164,7 @@
                                     <!-- HEADER -->
                                     <div class="custom-card-header">
                                       <h6>Paket Internet</h6>
-                                      <h5><?php echo $itemsDetail['kuota']; ?> | <?php echo $itemsDetail['validity']; ?> hari</h5>
+                                      <h5><?php echo $itemsDetail['kuota']; ?> | <?php echo $itemsDetail['validity']; ?></h5>
                                     </div>
 
                                     <!-- BODY -->
@@ -176,7 +176,7 @@
 
                                       <div class="card-info">
                                         <span>Masa aktif</span>
-                                        <strong><?php echo $itemsDetail['validity']; ?> hari</strong>
+                                        <strong><?php echo $itemsDetail['validity']; ?></strong>
                                       </div>
                                     </div>
 
@@ -255,7 +255,7 @@
                                     <!-- HEADER -->
                                     <div class="custom-card-header">
                                       <h6>Paket Internet</h6>
-                                      <h5><?php echo $itemsDetail['kuota']; ?> | <?php echo $itemsDetail['validity']; ?> hari</h5>
+                                      <h5><?php echo $itemsDetail['kuota']; ?> | <?php echo $itemsDetail['validity']; ?></h5>
                                     </div>
 
                                     <!-- BODY -->
@@ -315,7 +315,7 @@
       var harga = card.getAttribute('data-harga');
 
       // Isi ke elemen modal
-      simpatiModal.querySelector('.modal-title').textContent = nama + " (" + kuota + " | " + validity + " hari)";
+      simpatiModal.querySelector('.modal-title').textContent = nama + " (" + kuota + " | " + validity + ")";
       simpatiModal.querySelector('.hargaVoucher').value = formatRupiah(harga);
     });
 
@@ -331,7 +331,7 @@
       var harga = card.getAttribute('data-harga');
 
       // Isi ke elemen modal
-      byuModal.querySelector('.modal-title').textContent = nama + " (" + kuota + " | " + validity + " hari)";
+      byuModal.querySelector('.modal-title').textContent = nama + " (" + kuota + " | " + validity + ")";
       byuModal.querySelector('.hargaVoucher').value = formatRupiah(harga);
     });
 
