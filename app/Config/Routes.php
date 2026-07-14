@@ -8,6 +8,7 @@ use CodeIgniter\Router\RouteCollection;
 $routes->get('/', 'Home::index');
 $routes->get('o/(:segment)', 'Home::outlet/$1');
 $routes->get('h/(:segment)', 'Home::history/$1');
+$routes->post('api/payment/notification', 'Payment::notification');
 
 $routes->group('',['filter' => 'auth'], function($routes){
     $routes->get('outlet_store', 'Outlet::index');

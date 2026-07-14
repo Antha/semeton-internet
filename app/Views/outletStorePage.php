@@ -18,7 +18,7 @@
           <!-- Informasi Pelanggan -->
           <div class="mb-3">
             <label for="nomorTelkomsel" class="form-label">Masukkan Nomor Telkomsel</label>
-            <input type="text" class="form-control msisdn" placeholder="+62 8123456789">
+            <input type="text" class="form-control msisdn" placeholder="+62 8123456789" id="text-phone">
           </div>
 
           <div class="mb-3">
@@ -335,13 +335,14 @@
 
     $('#btn-buy').on('click', function() {
       let grossAmount = $('#text-price').val(); // ambil nilai dari input
+      let phone = $("#text-phone").val()
 
       grossAmount = grossAmount.replace(/[^0-9]/g, '');
 
       $.ajax({
         url: 'api/payment/create',   // endpoint CI4 kamu
         type: 'POST',
-        data: { gross_amount: grossAmount }, // kirim ke backend
+        data: { gross_amount: grossAmount, phone }, // kirim ke backend
         success: function(response) {
           // redirect ke Midtrans Snap page
           window.location.href = response.redirect_url;

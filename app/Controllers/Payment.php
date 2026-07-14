@@ -2,6 +2,8 @@
 
 namespace App\Controllers;
 
+use App\Models\PaymentLogModel;
+use App\Models\PaymentModel;
 use GuzzleHttp\Client;
 
 class Payment extends BaseController
@@ -25,6 +27,7 @@ class Payment extends BaseController
         $orderId   = uniqid();
         $grossAmount = $this->request->getPost('gross_amount');
         $grossAmount = (int) preg_replace('/[^0-9]/', '', $grossAmount);
+        $phone = $this->request->getPost('phone');
 
         $client = new Client(['http_errors' => false]); // jangan throw exception otomatis
 
@@ -41,6 +44,9 @@ class Payment extends BaseController
                 ],
                 'credit_card' => [
                     'secure' => true
+                ],
+                "customer_details" => [
+                    "phone"      => $phone
                 ],
                 "callbacks" => [
                     "finish" => base_url('payment/finish?order_id=' . $orderId . '&transaction_status=settlement')
@@ -65,44 +71,37 @@ class Payment extends BaseController
     }
     
 
-    // public function createTransaction()
-    // {
-    //     $serverKey = "TWlkLXNlcnZlci1MMDBZdXRPbHE5cHR0TDUtZkRxcDBkVzY6"; 
-    //     $orderId   = uniqid(); 
-    //     $grossAmount = $this->request->getPost('gross_amount'); // 
-    //     $data = [
-    //         "transaction_details" => [
-    //             "order_id"     => $orderId,
-    //             "gross_amount" => (int)$grossAmount
-    //         ],
-    //         "credit_card" => [
-    //             "secure" => true // tambahkan konfigurasi credit card
-    //         ]
-    //     ];
+    public function notification()
+    {
+        $json = $this->request->getJSON(true);
 
-    //     $client = service('curlrequest', [
-    //         'baseURI' => 'https://app.sandbox.midtrans.com',
-    //     ]);
+        $orderId = $json['order_id'] ?? null;
+        $status  = $json['transaction_status'] ?? null;
+        $phone   = $json['customer_details']['phone'] ?? null;
 
-    //     try {
-    //         $response = $client->post('/snap/v1/transactions', [
-    //             'headers' => [
-    //                 'Accept'        => 'application/json',
-    //                 'Content-Type'  => 'application/json',
-    //                 'Authorization' => 'Basic ' . base64_encode($serverKey . ':')
-    //             ],
-    //             'json' => $data
-    //         ]);
+        if ($orderId && $status) {
+            $paymentLog = new PaymentLogModel();
 
-    //         return $this->response->setJSON(json_decode($response->getBody(), true));
+            // updateOrInsert manual
+            $existing = $paymentLog->find($orderId);
 
-    //     } catch (\CodeIgniter\HTTP\Exceptions\HTTPException $e) {
-    //         return $this->response->setJSON([
-    //             'error'   => true,
-    //             'message' => $e->getMessage()
-    //         ]);
-    //     }
-    // }
+            if ($existing) {
+                $paymentLog->update($orderId, [
+                    'phone_number' => $phone,
+                    'status'       => $status,
+                    'updated_at'   => date('Y-m-d H:i:s')
+                ]);
+            } else {
+                $paymentLog->insert([
+                    'order_id'     => $orderId,
+                    'phone_number' => $phone,
+                    'status'       => $status,
+                    'updated_at'   => date('Y-m-d H:i:s')
+                ]);
+            }
+        }
 
+        return $this->response->setJSON(['success' => true]);
+    }
     
 }
