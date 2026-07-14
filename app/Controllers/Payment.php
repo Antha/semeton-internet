@@ -4,7 +4,6 @@ namespace App\Controllers;
 
 use App\Models\PaymentLogModel;
 use App\Models\PaymentModel;
-use GuzzleHttp\Client;
 
 class Payment extends BaseController
 {
@@ -23,53 +22,46 @@ class Payment extends BaseController
     //api
     public function createTransaction()
     {
-        $serverKey = "Mid-server-L00YutOlq9pttL5-fDqp0dW6"; // ganti dengan server key sandbox
-        $orderId   = uniqid();
-        $grossAmount = $this->request->getPost('gross_amount');
-        $grossAmount = (int) preg_replace('/[^0-9]/', '', $grossAmount);
-        $phone = $this->request->getPost('phone');
+        $serverKey   = ""; // ganti dengan server key sandbox
+        $orderId     = uniqid();
+        $grossAmount = (int) preg_replace('/[^0-9]/', '', $this->request->getPost('gross_amount'));
+        $phone       = $this->request->getPost('phone');
 
-        $client = new Client(['http_errors' => false]); // jangan throw exception otomatis
-
-        $response = $client->post('https://app.sandbox.midtrans.com/snap/v1/transactions', [
-            'headers' => [
-                'Accept'        => 'application/json',
-                'Content-Type'  => 'application/json',
-                'Authorization' => 'Basic ' . base64_encode($serverKey . ':')
+        $payload = json_encode([
+            "transaction_details" => [
+                "order_id"     => $orderId,
+                "gross_amount" => $grossAmount
             ],
-            'json' => [
-                'transaction_details' => [
-                    'order_id'     => $orderId,
-                    'gross_amount' => $grossAmount
-                ],
-                'credit_card' => [
-                    'secure' => true
-                ],
-                "customer_details" => [
-                    "phone"      => $phone
-                ],
-                "callbacks" => [
-                    "finish" => base_url('payment/finish?order_id=' . $orderId . '&transaction_status=settlement')
-                ]
+            "customer_details" => [
+                "phone" => $phone
+            ],
+            "credit_card" => [
+                "secure" => true
+            ],
+            "callbacks" => [
+                "finish" => base_url('payment/finish?order_id=' . $orderId . '&transaction_status=settlement')
             ]
         ]);
 
-        // Ambil status code & body
-        $statusCode = $response->getStatusCode();
-        $body       = json_decode($response->getBody(), true);
+        $options = [
+            "http" => [
+                "header"  => "Content-Type: application/json\r\n" .
+                            "Accept: application/json\r\n" .
+                            "Authorization: Basic " . base64_encode($serverKey . ":") . "\r\n",
+                "method"  => "POST",
+                "content" => $payload
+            ]
+        ];
 
-        if ($statusCode !== 201) {
-            // Kalau error, tampilkan pesan dari Midtrans
-            return $this->response->setJSON([
-                'error'   => true,
-                'status'  => $statusCode,
-                'message' => $body['error_messages'] ?? 'Unknown error'
-            ]);
-        }
+        $context  = stream_context_create($options);
+        $result   = file_get_contents("https://app.sandbox.midtrans.com/snap/v1/transactions", false, $context);
 
-        return $this->response->setJSON($body);
+        $response = json_decode($result, true);
+
+        return $this->response->setJSON($response);
     }
-    
+
+
 
     public function notification()
     {
