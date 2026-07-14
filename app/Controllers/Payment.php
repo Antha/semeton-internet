@@ -22,7 +22,7 @@ class Payment extends BaseController
     //api
     public function createTransaction()
     {
-        $serverKey   = ""; // ganti dengan server key sandbox
+        $serverKey   = getenv("MIDTRANS_SERVER_KEY"); 
         $orderId     = uniqid();
         $grossAmount = (int) preg_replace('/[^0-9]/', '', $this->request->getPost('gross_amount'));
         $phone       = $this->request->getPost('phone');
