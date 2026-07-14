@@ -24,7 +24,7 @@
           <div class="mb-3">
             <fieldset disabled>
             <label class="form-label">Harga</label>
-            <input type="text" class="form-control hargaVoucher" readonly>
+            <input type="text" class="form-control hargaVoucher" id="text-price" readonly>
             </fieldset>
           </div>
 
@@ -41,7 +41,7 @@
         <!-- Footer -->
         <div class="modal-footer">
           <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Batal</button>
-          <button type="button" class="btn btn-orange">Beli</button>
+          <button type="button" class="btn btn-orange" id="btn-buy">Beli</button>
         </div>
       </div>
  
@@ -292,8 +292,6 @@
         </div>
       </div>
     </div>
-    
-   
   </section>
 
   <!-- Header -->
@@ -335,6 +333,24 @@
       byuModal.querySelector('.hargaVoucher').value = formatRupiah(harga);
     });
 
+    $('#btn-buy').on('click', function() {
+      let grossAmount = $('#text-price').val(); // ambil nilai dari input
+
+      grossAmount = grossAmount.replace(/[^0-9]/g, '');
+
+      $.ajax({
+        url: 'api/payment/create',   // endpoint CI4 kamu
+        type: 'POST',
+        data: { gross_amount: grossAmount }, // kirim ke backend
+        success: function(response) {
+          // redirect ke Midtrans Snap page
+          window.location.href = response.redirect_url;
+        },
+        error: function(xhr, status, error) {
+          alert('Transaction failed: ' + error);
+        }
+      });
+    });
 
   </script>
 <?php $this->endSection() ?>
