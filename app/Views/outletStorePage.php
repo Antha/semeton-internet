@@ -371,7 +371,7 @@
         data: { gross_amount, phone }, // kirim ke backend
         success: function(response) {
           // redirect ke Midtrans Snap page
-          window.location.href = response.redirect_url;
+          window.location.href = response.data.redirect_url;
           $('#loading-overlay').hide();
         },
         error: function(xhr, status, error) {
