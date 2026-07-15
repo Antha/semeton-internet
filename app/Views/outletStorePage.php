@@ -3,7 +3,7 @@
 <?php $this->section('content') ?>
 
   <div id="loading-overlay" style="display:none;">
-    <div class="spinner"></div>
+    <div class="loading-overlay-spinner"></div>
   </div>
   
   <!-- Modal -->
@@ -297,6 +297,8 @@
         </div>
       </div>
     </div>
+    
+   
   </section>
 
   <!-- Header -->
@@ -337,6 +339,8 @@
       byuModal.querySelector('.modal-title').textContent = nama + " (" + kuota + " | " + validity + ")";
       byuModal.querySelector('.hargaVoucher').value = formatRupiah(harga);
     });
+
+    $('#loading-overlay').hide();
 
     $('#form-submit').on('submit', function(e) {
       e.preventDefault()
