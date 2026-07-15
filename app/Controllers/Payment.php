@@ -67,33 +67,46 @@ class Payment extends BaseController
     {
         $json = $this->request->getJSON(true);
 
+        $serverKey   = getenv("MIDTRANS_SERVER_KEY"); 
         $orderId = $json['order_id'] ?? null;
         $status  = $json['transaction_status'] ?? null;
+        $statusCode = $json['status_code'] ?? null;
         $phone   = $json['customer_details']['phone'] ?? null;
+        $grossAmount = $json['gross_amount'] ?? null;
+        $paymentType = $json['payment_type'] ?? null;
 
-        if ($orderId && $status) {
-            $paymentLog = new PaymentLogModel();
+        $expectedSignature = hash('sha512', $orderId . $statusCode . $grossAmount . $serverKey);
 
-            // updateOrInsert manual
-            $existing = $paymentLog->find($orderId);
+        if ($json['signature_key'] === $expectedSignature) {
+            if ($orderId && $status) {
+                $paymentLog = new PaymentLogModel();
 
-            if ($existing) {
-                $paymentLog->update($orderId, [
-                    'phone_number' => $phone,
-                    'status'       => $status,
-                    'updated_at'   => date('Y-m-d H:i:s')
-                ]);
-            } else {
-                $paymentLog->insert([
-                    'order_id'     => $orderId,
-                    'phone_number' => $phone,
-                    'status'       => $status,
-                    'updated_at'   => date('Y-m-d H:i:s')
-                ]);
+                // updateOrInsert manual
+                $existing = $paymentLog->find($orderId);
+
+                if ($existing) {
+                    $paymentLog->update($orderId, [
+                        'phone_number' => $phone,
+                        'status'       => $status,
+                        'payment_type' => $paymentType,
+                        'gross_amount' => $grossAmount,
+                        'updated_at'   => date('Y-m-d H:i:s')
+                    ]);
+                } else {
+                    $paymentLog->insert([
+                        'order_id'     => $orderId,
+                        'phone_number' => $phone,
+                        'status'       => $status,
+                        'payment_type' => $paymentType,
+                        'gross_amount' => $grossAmount,
+                        'updated_at'   => date('Y-m-d H:i:s')
+                    ]);
+                }
             }
-        }
 
-        return $this->response->setJSON(['success' => true]);
+            return $this->response->setJSON(['success' => true]);
+        }else{
+            return $this->response->setStatusCode(400)->setJSON(['error' => "true"]);
+        }
     }
-    
 }

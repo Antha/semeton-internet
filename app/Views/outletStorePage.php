@@ -1,6 +1,10 @@
 <?php $this->extend('/templates/main') ?>
 
 <?php $this->section('content') ?>
+
+  <div id="loading-overlay" style="display:none;">
+    <div class="spinner"></div>
+  </div>
   
   <!-- Modal -->
   <div class="modal fade" id="simpatiModal" tabindex="-1" aria-labelledby="simpatiLabel" aria-hidden="true">
@@ -16,33 +20,34 @@
         <!-- Body -->
         <div class="modal-body">
           <!-- Informasi Pelanggan -->
-          <div class="mb-3">
-            <label for="nomorTelkomsel" class="form-label">Masukkan Nomor Telkomsel</label>
-            <input type="text" class="form-control msisdn" placeholder="+62 8123456789" id="text-phone">
-          </div>
+          <form id="form-submit">
+            <div class="mb-3">
+              <label for="nomorTelkomsel" class="form-label">Masukkan Nomor Telkomsel</label>
+              <input type="text" class="form-control msisdn" placeholder="+62 8123456789" id="text-phone" required>
+            </div>
 
-          <div class="mb-3">
-            <fieldset disabled>
-            <label class="form-label">Harga</label>
-            <input type="text" class="form-control hargaVoucher" id="text-price" readonly>
-            </fieldset>
-          </div>
+            <div class="mb-3">
+              <fieldset disabled>
+              <label class="form-label">Harga</label>
+              <input type="text" class="form-control hargaVoucher" id="text-price" readonly>
+              </fieldset>
+            </div>
 
-          <!-- Metode Pembayaran -->
-          <div class="mb-3">
-            <label class="form-label">Metode Pembayaran</label>
-            <div class="card p-3">
-              <p>QRIS untuk semua pembayaran</p>
-              <img src="https://tse1.mm.bing.net/th/id/OIP.SJk3_1NbGUAvZ-bJslHM4wHaC0?rs=1&pid=ImgDetMain&o=7&rm=3" alt="QRIS" width="100">
+            <!-- Metode Pembayaran -->
+            <div class="mb-3">
+              <label class="form-label">Metode Pembayaran</label>
+              <div class="card p-3">
+                <img src="<?php echo base_url("images/method-snap.jpeg") ?>" alt="QRIS" width="400">
+              </div>
             </div>
           </div>
-        </div>
-        
-        <!-- Footer -->
-        <div class="modal-footer">
-          <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Batal</button>
-          <button type="button" class="btn btn-orange" id="btn-buy">Beli</button>
-        </div>
+          
+          <!-- Footer -->
+          <div class="modal-footer">
+            <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Batal</button>
+            <button type="submit" class="btn btn-orange" id="btn-buy">Beli</button>
+          </div>
+        </form>
       </div>
  
     </div>
@@ -61,35 +66,35 @@
         <!-- Body -->
         <div class="modal-body">
           <!-- Informasi Pelanggan -->
-          <div class="mb-3">
-            <label for="nomorTelkomsel" class="form-label">Masukkan Nomor Telkomsel</label>
-            <input type="text" class="form-control msisdn" placeholder="+62 8123456789">
-          </div>
+          <form id="form-submit-blue">
+            <div class="mb-3">
+              <label for="nomorTelkomsel" class="form-label">Masukkan Nomor Telkomsel</label>
+              <input type="text" class="form-control msisdn" placeholder="+62 8123456789" id="text-phone-blue" required>
+            </div>
 
-          <div class="mb-3">
-            <fieldset disabled>
-            <label class="form-label">Harga</label>
-            <input type="text" class="form-control hargaVoucher" readonly>
-            </fieldset>
-          </div>
+            <div class="mb-3">
+              <fieldset disabled>
+              <label class="form-label">Harga</label>
+              <input type="text" class="form-control hargaVoucher" id="text-price-blue" readonly>
+              </fieldset>
+            </div>
 
-          <!-- Metode Pembayaran -->
-          <div class="mb-3">
-            <label class="form-label">Metode Pembayaran</label>
-            <div class="card p-3">
-              <p>QRIS untuk semua pembayaran</p>
-              <img src="https://tse1.mm.bing.net/th/id/OIP.SJk3_1NbGUAvZ-bJslHM4wHaC0?rs=1&pid=ImgDetMain&o=7&rm=3" alt="QRIS" width="100">
+            <!-- Metode Pembayaran -->
+            <div class="mb-3">
+              <label class="form-label">Metode Pembayaran</label>
+              <div class="card p-3">
+                <img src="<?php echo base_url("images/method-snap.jpeg") ?>" alt="QRIS" width="400">
+              </div>
             </div>
           </div>
-        </div>
-        
-        <!-- Footer -->
-        <div class="modal-footer">
-          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
-          <button type="button" class="btn btn-warning">Beli Paket</button>
-        </div>
+          
+          <!-- Footer -->
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
+            <button type="submit" class="btn btn-warning" id="btn-buy-blue">Beli Paket</button>
+          </div>
+        </form>
       </div>
- 
     </div>
   </div>
 
@@ -333,25 +338,43 @@
       byuModal.querySelector('.hargaVoucher').value = formatRupiah(harga);
     });
 
-    $('#btn-buy').on('click', function() {
+    $('#form-submit').on('submit', function(e) {
+      e.preventDefault()
+
       let grossAmount = $('#text-price').val(); // ambil nilai dari input
       let phone = $("#text-phone").val()
+      grossAmount = grossAmount.replace(/[^0-9]/g, '');
+
+      postPaymentCreate(grossAmount, phone)
+    });
+
+    $('#form-submit-blue').on('submit', function(e) {
+      e.preventDefault()
+
+      let grossAmount = $('#text-price-blue').val(); // ambil nilai dari input
+      let phone = $("#text-phone-blue").val()
 
       grossAmount = grossAmount.replace(/[^0-9]/g, '');
 
+      postPaymentCreate(grossAmount, phone);
+    });
+
+    function postPaymentCreate(gross_amount, phone){
+      $('#loading-overlay').show();
       $.ajax({
         url: 'api/payment/create',   // endpoint CI4 kamu
         type: 'POST',
-        data: { gross_amount: grossAmount, phone }, // kirim ke backend
+        data: { gross_amount, phone }, // kirim ke backend
         success: function(response) {
           // redirect ke Midtrans Snap page
           window.location.href = response.redirect_url;
+          $('#loading-overlay').hide();
         },
         error: function(xhr, status, error) {
-          alert('Transaction failed: ' + error);
+          console.log('Transaction failed: ' + error);
         }
       });
-    });
+    }
 
   </script>
 <?php $this->endSection() ?>

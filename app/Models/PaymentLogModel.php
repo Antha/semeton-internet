@@ -14,6 +14,8 @@ class PaymentLogModel extends Model
         'order_id',
         'phone_number',
         'status',
+        'payment_type',
+        'gross_amount',
         'updated_at'
     ];
 
