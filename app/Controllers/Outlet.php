@@ -3,6 +3,7 @@
 namespace App\Controllers;
 
 use App\Models\OutletModel;
+use App\Models\PaymentLogModel;
 use App\Models\TransactionModel;
 use App\Models\VoucherModel;
 
@@ -11,12 +12,14 @@ class Outlet extends BaseController
     protected $session;
     protected $vfModel;
     protected $trxModel;
+    protected $paymentLogModel;
 
     public function __construct()
     {
         $this->session = session();
         $this->vfModel = new VoucherModel();
         $this->trxModel = new TransactionModel();
+        $this->paymentLogModel = new PaymentLogModel();
     } 
 
     public function index()
@@ -53,9 +56,8 @@ class Outlet extends BaseController
 
     public function historyTrx()
     {
-        $data['listTrxPeriode'] = $this->trxModel->listTrxPeriode();
+        $data['listpaymentlogs'] = $this->paymentLogModel->getByOutlet($this->session->get("id_outlet"));
 
         return view('outletHistoryPage',$data);
     }
-
 }

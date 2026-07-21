@@ -4,9 +4,21 @@ namespace App\Controllers;
 
 use App\Models\PaymentLogModel;
 use App\Models\PaymentModel;
+use App\Models\VoucherModel;
 
 class Payment extends BaseController
 {
+    protected $session;
+    protected $vfModel;
+    protected $paymentLogModel;
+
+    public function __construct()
+    {
+        $this->session = session();
+        $this->vfModel = new VoucherModel();
+        $this->paymentLogModel = new PaymentLogModel();
+    } 
+    
     //frontend
     public function finish()
     {
@@ -22,11 +34,21 @@ class Payment extends BaseController
     //api
     public function createTransaction()
     {
-        try {
-            $serverKey   = getenv("MIDTRANS_SERVER_KEY"); 
+        $env = getenv('MIDTRANS_ENV');
+
+        if ($env === 'production') {
+            $baseUrl = getenv('MIDTRANS_PRODUCTION_URL');
+            $serverKey = getenv('MIDTRANS_PRODUCTION_KEY');
+        } else {
+            $baseUrl = getenv('MIDTRANS_SANDBOX_URL');
+            $serverKey = getenv('MIDTRANS_SANDBOX_KEY');
+        }
+
+        try { 
             $orderId     = uniqid();
-            $grossAmount = (int) preg_replace('/[^0-9]/', '', $this->request->getPost('gross_amount'));
             $phone       = $this->request->getPost('phone');
+            $id_voucher  = $this->request->getPost('id_voucher');
+            $cardItem = $this->vfModel->cardItem($id_voucher);
 
             if (!$phone) {
                 return $this->response
@@ -37,13 +59,26 @@ class Payment extends BaseController
                     ]);
             }
 
+            $this->paymentLogModel->insert([
+                "order_id" => $orderId,
+                "phone_number" => $phone,
+                "id_voucher" => $id_voucher,
+                "id_outlet" => $this->session->get("id_outlet")
+            ]);
+
             $payload = json_encode([
                 "transaction_details" => [
                     "order_id"     => $orderId,
-                    "gross_amount" => $grossAmount
+                    "gross_amount" => $cardItem['harga']
                 ],
                 "customer_details" => [
                     "phone" => $phone
+                ],
+                "item_details" => [
+                    "name" =>  $cardItem['nama_voucher'],
+                    "price" =>  $cardItem['harga'],
+                    'quantity' => 1,
+                    "id" =>  $id_voucher
                 ],
                 "credit_card" => [
                     "secure" => true
@@ -65,7 +100,7 @@ class Payment extends BaseController
             ];
 
             $context  = stream_context_create($options);
-            $result   = file_get_contents("https://app.sandbox.midtrans.com/snap/v1/transactions", false, $context);
+            $result   = file_get_contents($baseUrl."/snap/v1/transactions", false, $context);
 
             if ($result === false) {
                 return $this->response
@@ -108,8 +143,15 @@ class Payment extends BaseController
     {
         try {
             $json = $this->request->getJSON(true);
+            $env = getenv('MIDTRANS_ENV');
 
-            $serverKey   = getenv("MIDTRANS_SERVER_KEY"); 
+            if ($env === 'production') {
+                $serverKey = getenv('MIDTRANS_PRODUCTION_KEY');
+            } else {
+                $serverKey = getenv('MIDTRANS_SANDBOX_KEY');
+            }
+
+
             $orderId     = $json['order_id'] ?? null;
             $status      = $json['transaction_status'] ?? null;
             $statusCode  = $json['status_code'] ?? null;

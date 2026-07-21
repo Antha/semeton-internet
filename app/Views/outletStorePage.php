@@ -21,6 +21,8 @@
         <div class="modal-body">
           <!-- Informasi Pelanggan -->
           <form id="form-submit">
+            <input type="hidden" id="text-idvoucher" readonly>
+
             <div class="mb-3">
               <label for="nomorTelkomsel" class="form-label">Masukkan Nomor Telkomsel</label>
               <input type="text" class="form-control msisdn" placeholder="+62 8123456789" id="text-phone" required>
@@ -67,6 +69,8 @@
         <div class="modal-body">
           <!-- Informasi Pelanggan -->
           <form id="form-submit-blue">
+            <input type="hidden" id="text-idvoucher-blue" readonly>
+
             <div class="mb-3">
               <label for="nomorTelkomsel" class="form-label">Masukkan Nomor Telkomsel</label>
               <input type="text" class="form-control msisdn" placeholder="+62 8123456789" id="text-phone-blue" required>
@@ -126,7 +130,7 @@
             <div class="col-12">
               <div class="accordion" id="accordionExampleSimpati">
                 <?php foreach($listDisplaySimpati as $rows){ ?>
-                <div class="accordion-item">
+                  <div class="accordion-item">
                     <h2 class="accordion-header" id="heading<?php echo $rows['group_display']; ?>">
                       <button class="accordion-button collapsed" type="button" 
                       data-bs-toggle="collapse" 
@@ -155,16 +159,17 @@
                                 if($itemsDetail['group_display'] == $rows['group_display']){?>
                                 <div class="col-12 col-sm-6 col-md-4 col-lg-3 mb-2">
                                   <div class="custom-card"  
-                                        data-group="<?php echo $itemsDetail['group_voucher']; ?>"
-                                        data-nama="<?php echo $itemsDetail['nama_voucher']; ?>"
-                                        data-kuota="<?php echo $itemsDetail['kuota']; ?>"
-                                        data-validity="<?php echo $itemsDetail['validity']; ?>"
-                                        data-harga="<?php echo $itemsDetail['harga']; ?>"
-                                        data-kategori="SIMPATI"
-                                        data-modal="#simpatiModal"
-                                        data-bs-toggle="modal" 
-                                        data-bs-target="#simpatiModal"
-                                        role="button">
+                                    data-idvoucher="<?php echo $itemsDetail['id']; ?>"
+                                    data-group="<?php echo $itemsDetail['group_voucher']; ?>"
+                                    data-nama="<?php echo $itemsDetail['nama_voucher']; ?>"
+                                    data-kuota="<?php echo $itemsDetail['kuota']; ?>"
+                                    data-validity="<?php echo $itemsDetail['validity']; ?>"
+                                    data-harga="<?php echo $itemsDetail['harga']; ?>"
+                                    data-kategori="SIMPATI"
+                                    data-modal="#simpatiModal"
+                                    data-bs-toggle="modal" 
+                                    data-bs-target="#simpatiModal"
+                                    role="button">
 
                                     <!-- HEADER -->
                                     <div class="custom-card-header">
@@ -246,6 +251,7 @@
                                 if($itemsDetail['group_display'] == $rows['group_display']){?>
                                 <div class="col-md-3 mb-2">
                                   <div class="custom-card byu-card"  
+                                        data-idvoucher="<?php echo $itemsDetail['id']; ?>"
                                         data-group="<?php echo $itemsDetail['group_voucher']; ?>"
                                         data-nama="<?php echo $itemsDetail['nama_voucher']; ?>"
                                         data-kuota="<?php echo $itemsDetail['kuota']; ?>"
@@ -318,10 +324,12 @@
       var kuota = card.getAttribute('data-kuota');
       var validity = card.getAttribute('data-validity');
       var harga = card.getAttribute('data-harga');
+      var idvoucher = card.getAttribute('data-idvoucher');
 
       // Isi ke elemen modal
       simpatiModal.querySelector('.modal-title').textContent = nama + " (" + kuota + " | " + validity + ")";
       simpatiModal.querySelector('.hargaVoucher').value = formatRupiah(harga);
+      simpatiModal.querySelector('#text-idvoucher').value  = idvoucher;
     });
 
     var byuModal = document.getElementById('byuModal');
@@ -334,10 +342,12 @@
       var kuota = card.getAttribute('data-kuota');
       var validity = card.getAttribute('data-validity');
       var harga = card.getAttribute('data-harga');
+      var idvoucher = card.getAttribute('data-idvoucher');
 
       // Isi ke elemen modal
       byuModal.querySelector('.modal-title').textContent = nama + " (" + kuota + " | " + validity + ")";
       byuModal.querySelector('.hargaVoucher').value = formatRupiah(harga);
+      byuModal.querySelector('#text-idvoucher-blue').value = idvoucher;
     });
 
     $('#loading-overlay').hide();
@@ -345,30 +355,25 @@
     $('#form-submit').on('submit', function(e) {
       e.preventDefault()
 
-      let grossAmount = $('#text-price').val(); // ambil nilai dari input
       let phone = $("#text-phone").val()
-      grossAmount = grossAmount.replace(/[^0-9]/g, '');
-
-      postPaymentCreate(grossAmount, phone)
+      let id_voucher = $("#text-idvoucher").val();
+      postPaymentCreate(phone, id_voucher)
     });
 
     $('#form-submit-blue').on('submit', function(e) {
       e.preventDefault()
 
-      let grossAmount = $('#text-price-blue').val(); // ambil nilai dari input
       let phone = $("#text-phone-blue").val()
-
-      grossAmount = grossAmount.replace(/[^0-9]/g, '');
-
-      postPaymentCreate(grossAmount, phone);
+      let id_voucher = $("#text-idvoucher-blue").val();
+      postPaymentCreate(phone, id_voucher)
     });
 
-    function postPaymentCreate(gross_amount, phone){
+    function postPaymentCreate(phone, id_voucher){
       $('#loading-overlay').show();
       $.ajax({
         url: 'api/payment/create',   // endpoint CI4 kamu
         type: 'POST',
-        data: { gross_amount, phone }, // kirim ke backend
+        data: { id_voucher, phone }, // kirim ke backend
         success: function(response) {
           // redirect ke Midtrans Snap page
           window.location.href = response.data.redirect_url;

@@ -7,7 +7,6 @@
   
   <div class="container">
     <div class="row">
-      
       <div class="col-10 mt-5 align-center mx-auto">
         <div class="btn-capture-dl-wrapper container-fluid mt-4 mb-2">
             <div class="row justify-content-end">
@@ -22,15 +21,23 @@
                 <table id="dataTable" class="table table-sm table-bordered table-hover table-cstm">
                     <thead>
                         <tr class="text-center align-middle">
-                            <th rowspan="3" class="deep_blue align-middle" scope="col">Tanggal TRX</th>
-                            <th rowspan="3" class="deep_blue align-middle" scope="col">ID Outlet</th>
-                            <th rowspan="3" class="deep_blue align-middle" scope="col">MSISDN</th>
-                            <th rowspan="3" class="deep_blue align-middle" scope="col">Product</th>
-                            <th rowspan="3" class="deep_blue align-middle" scope="col">Kode Voucher</th>
+                            <th rowspan="3" class="deep_blue align-middle" scope="col">Phone Number</th>
+                            <th rowspan="3" class="deep_blue align-middle" scope="col">Order ID</th>
+                            <th rowspan="3" class="deep_blue align-middle" scope="col">Status</th>
+                            <th rowspan="3" class="deep_blue align-middle" scope="col">Paymeny Type</th>
+                            <th rowspan="3" class="deep_blue align-middle" scope="col">Gross Amount</th>
                         </tr>
                     </thead>
                     <tbody>
-                        
+                        <?php foreach($listpaymentlogs as $list) { ?>
+                            <tr class="text-center align-middle">
+                                <td class="deep_blue align-middle" scope="col"><?php echo $list["phone_number"] ?></td>
+                                <td class="deep_blue align-middle" scope="col"><?php echo $list["order_id"] ?></td>
+                                <td class="deep_blue align-middle" scope="col"><?php echo $list["status"] ?></td>
+                                <td class="deep_blue align-middle" scope="col"><?php echo $list["payment_type"] ?></td>
+                                <td class="deep_blue align-middle" scope="col"><?php echo $list["gross_amount"] ?></td>
+                            </tr>
+                        <?php } ?>
                     </tbody>
                 </table>
               </div>

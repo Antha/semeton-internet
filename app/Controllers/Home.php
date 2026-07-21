@@ -32,9 +32,12 @@ class Home extends BaseController
         }
 
         $this->session->set(
-            ['outlet_name' => $new_slug,
-            'outlet_slug' => $slug,
-            'isVerified' => TRUE]
+            [
+                'id_outlet' => $authOutlet['id_outlet'],
+                'outlet_name' => $new_slug,
+                'outlet_slug' => $slug,
+                'isVerified' => TRUE
+            ]
         );
        
         return redirect()->to('outlet_store');

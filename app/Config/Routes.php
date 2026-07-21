@@ -16,5 +16,6 @@ $routes->group('',['filter' => 'auth'], function($routes){
     $routes->get('outlet_history', 'Outlet::historyTrx');
     $routes->get('logout', 'Home::logout');
     $routes->get('payment/finish', 'Payment::finish');
+
     $routes->post('api/payment/create', 'Payment::createTransaction');
 });
